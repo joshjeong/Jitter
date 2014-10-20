@@ -49,19 +49,19 @@ app.get("/", function(request, response) {
 });
 
 
-
 // Stream sample public tweets
 var stream = T.stream('statuses/sample')
 
 // Stream based on filter
-// var stream = T.stream('statuses/filter', { track: 'mango' })
+// var stream = T.stream('statuses/filter', { track: 'webdeveloper' })
 
 // Stream based on location
 // var stream = T.stream('statuses/filter', { locations: sanFrancisco })
 
 // Start stream
 stream.on('tweet', function (tweet) {
-  console.log(tweet)
+  io.sockets.emit("newTweet", {tweet: tweet})
+  // document.getElementById('tweet-river').innerHTML("<h1>"+ tweet + "</h1><br>")
 })
 
 
