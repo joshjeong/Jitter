@@ -1,17 +1,59 @@
 body {
-  padding: 3em;
   font-family: 'Open Sans', sans-serif;
   font-size: 1em;
 }
 
-textarea {
-  resize: none;
+html{
+/*  background: url(../images/coffee_desk.gif) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;*/
+
 }
 
-.inlineBlock {
- display: inline-block;
+#tweet-river{
+  padding: 5px;
+  position: absolute;
+  top: 5rem;
+  right: 10rem;
+  height: 50rem;
+  overflow: scroll;
+  border: 1rem solid #343434;
 }
 
-.topAligned {
- vertical-align: top;
+
+#filter{
+  border: 1px solid white;
+  height: 10rem;
+  border: 1rem solid #343434;
+  top: 5rem;
+  left: 10rem;
+}
+
+#filter-input{
+  /*border: none;*/
+  position: absolute;
+  outline: none;
+  text-align: center;
+  width: 20rem;
+  margin: auto;
+}
+
+.pic{
+
+}
+
+.username{
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.time{
+  color: lightgrey;
+}
+
+.tweet{
+  padding: 1rem;
+  border-bottom: 2px solid lightgrey;
 }
