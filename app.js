@@ -44,24 +44,28 @@ app.use(bodyParser.json());
 app.get("/", function(request, response) {
 
   //Render the view called "index"
+  // var filterOptions = ['Front End', 'Back']
   response.render("index");
 
 });
-
 
 
 // Stream sample public tweets
 var stream = T.stream('statuses/sample')
 
 // Stream based on filter
-// var stream = T.stream('statuses/filter', { track: 'mango' })
+// var stream = T.stream('statuses/filter', { track: 'webdeveloper' })
 
 // Stream based on location
 // var stream = T.stream('statuses/filter', { locations: sanFrancisco })
 
+//  search twitter for all tweets containing the word 'banana' since Nov. 11, 2011
+//
+
+
 // Start stream
 stream.on('tweet', function (tweet) {
-  console.log(tweet)
+  io.sockets.emit("newTweet", {tweet: tweet})
 })
 
 
