@@ -44,6 +44,7 @@ app.use(bodyParser.json());
 app.get("/", function(request, response) {
 
   //Render the view called "index"
+  // var filterOptions = ['Front End', 'Back']
   response.render("index");
 
 });
@@ -58,10 +59,13 @@ var stream = T.stream('statuses/sample')
 // Stream based on location
 // var stream = T.stream('statuses/filter', { locations: sanFrancisco })
 
+//  search twitter for all tweets containing the word 'banana' since Nov. 11, 2011
+//
+
+
 // Start stream
 stream.on('tweet', function (tweet) {
   io.sockets.emit("newTweet", {tweet: tweet})
-  // document.getElementById('tweet-river').innerHTML("<h1>"+ tweet + "</h1><br>")
 })
 
 
