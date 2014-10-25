@@ -1,77 +1,51 @@
-var express = require("express")
+var express = require('express')
+  , server = require('http').createServer( app )
+  , io = require('socket.io').listen( server )
+  , path = require('path')
   , app = express()
-  , http = require("http").createServer(app)
-  , bodyParser = require("body-parser")
-  , io = require("socket.io").listen(http)
-  , _ = require("underscore")
   , dotenv = require('dotenv')
-  , Twit = require('twit')
-  , util = require('util');
+  , Twit = require('twit');
 
-dotenv.load();
+    dotenv.load();
 
-var T = new Twit({
-    consumer_key: process.env.CONSUMER_KEY
-  , consumer_secret: process.env.CONSUMER_SECRET
-  , access_token: process.env.ACCESS_TOKEN
-  , access_token_secret: process.env.ACCESS_TOKEN_SECRET
+
+app.set( 'port', process.env.PORT || 3000 );
+app.set( 'views', __dirname + '/views' );
+app.set( 'view engine', 'jade' );
+app.use( express.static(path.join(__dirname, 'public') ));
+
+
+var errorHandler = function ( error, status ) {
+  console.error.bind( console, error, status )
+}
+
+var tweetStream = new Twit({
+  consumer_key: process.env.CONSUMER_KEY,
+  consumer_secret: process.env.CONSUMER_SECRET,
+  access_token: process.env.ACCESS_TOKEN,
+  access_token_secret: process.env.ACCESS_TOKEN_SECRET
 });
 
 
-/* Server config */
+/* sockets good, just commented out to see in terminal */
 
-//Server's IP address
-app.set("ipaddr", "127.0.0.1");
+var stream = tweetStream.stream('statuses/sample')
+// io.sockets.on('connection', function ( socket ) {
+  stream.on('tweet', function( tweet, error ) {
 
-//Server's port number 
-app.set("port", 8080);
+  /* if error, remove error from stream and client */
 
-//Specify the views folder
-app.set("views", __dirname + "/views");
+      if ( error ) {
+        errorHandler ( error )
+      }
 
-//View engine is Jade
-app.set("view engine", "jade");
+      console.log( tweet )
 
-//Specify where the static content is
-app.use(express.static("public", __dirname + "/public"));
-
-//Tells server to support JSON requests
-app.use(bodyParser.json());
-
-/* Server routing */
-
-//Handle route "GET /", as in "http://localhost:8080/"
-app.get("/", function(request, response) {
-
-  //Render the view called "index"
-  // var filterOptions = ['Front End', 'Back']
-  response.render("index");
-
+    // socket.emit('info', { tweet: tweet});
+  // });
 });
 
 
-// Stream sample public tweets
-var stream = T.stream('statuses/sample')
-
-// Stream based on filter
-// var stream = T.stream('statuses/filter', { track: 'webdeveloper' })
-
-// Stream based on location
-// var stream = T.stream('statuses/filter', { locations: sanFrancisco })
-
-//  search twitter for all tweets containing the word 'banana' since Nov. 11, 2011
-//
-
-
-// Start stream
-stream.on('tweet', function (tweet) {
-  io.sockets.emit("newTweet", {tweet: tweet})
-})
-
-
-// Start server
-http.listen(app.get("port"), app.get("ipaddr"), function() {
-  console.log("Server up and running. Go to http://" + app.get("ipaddr") + ":" + app.get("port"));
+server.listen( app.get( 'port' ), function(){
+  console.log( 'Job tracker successfully listening on port : ' + app.get( 'port' ) );
 });
-
-
