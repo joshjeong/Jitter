@@ -6,9 +6,11 @@ var express = require("express")
   , _ = require("underscore")
   , dotenv = require('dotenv')
   , Twit = require('twit')
-  , util = require('util');
+  , util = require('util')
+  , mongoose = require('mongoose');
 
 dotenv.load();
+mongoose.connect('mongodb://55.55.55.5/test')
 
 var T = new Twit({
     consumer_key: process.env.CONSUMER_KEY
@@ -16,6 +18,35 @@ var T = new Twit({
   , access_token: process.env.ACCESS_TOKEN
   , access_token_secret: process.env.ACCESS_TOKEN_SECRET
 });
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback(){
+});
+
+var tweetSchema = mongoose.Schema({
+                screenName: String 
+                // date: String, 
+                // pic: String, 
+                // tweet: String
+});
+
+var Tweet = mongoose.model('tweets', {screenName: String});
+
+
+var test = new Tweet({
+                screenName: "josh"
+              // , date: "March 1"
+              // , pic: "www.something.com"
+              // , tweet: "hello world!"
+})
+
+
+app.get('/tweets', function(req, res){
+  mongoose.model('tweets').find(function(err, tweets){
+    res.send(tweets)
+  })
+})
 
 
 /* Server config */
@@ -50,24 +81,14 @@ app.get("/", function(request, response) {
 });
 
 
-// Stream sample public tweets
-var stream = T.stream('statuses/sample')
+io.on("connection", function(socket){
 
-// Stream based on filter
-// var stream = T.stream('statuses/filter', { track: 'webdeveloper' })
+  var stream = T.stream('statuses/filter', { track: 'food' })
 
-// Stream based on location
-// var stream = T.stream('statuses/filter', { locations: sanFrancisco })
-
-//  search twitter for all tweets containing the word 'banana' since Nov. 11, 2011
-//
-
-
-// Start stream
-stream.on('tweet', function (tweet) {
-  io.sockets.emit("newTweet", {tweet: tweet})
+  stream.on('tweet', function (data) {
+    io.sockets.emit('newTweet', {tweet: data})
+  })
 })
-
 
 // Start server
 http.listen(app.get("port"), app.get("ipaddr"), function() {
