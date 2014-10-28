@@ -10,7 +10,6 @@ var express = require("express")
   , mongoose = require('mongoose');
 
 dotenv.load();
-mongoose.connect('mongodb://55.55.55.5/test')
 
 var T = new Twit({
     consumer_key: process.env.CONSUMER_KEY
@@ -20,26 +19,23 @@ var T = new Twit({
 });
 
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function callback(){
-});
 
 var tweetSchema = mongoose.Schema({
-            screenName : String, 
-            date       : String, 
-            pic        : String, 
-            tweetText  : String
+    screenName : String
+  , date       : Date
+  , pic        : String
+  , tweetText  : String
 });
 
-var tweet = mongoose.model('job', tweetSchema);
+var Tweet = mongoose.model('Tweet', tweetSchema);
 
 
-// app.get('/tweets', function(req, res){
-//   mongoose.model('tweets').find(function(err, tweets){
-//     res.send(tweets)
-//   })
-// })
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback(){
+  
+});
 
+mongoose.connect('mongodb://localhost/test')
 
 /* Server config */
 
@@ -67,15 +63,13 @@ app.use(bodyParser.json());
 app.get("/", function(request, response) {
 
   //Render the view called "index"
-  // var filterOptions = ['Front End', 'Back']
   response.render("index");
 
 });
 
 
 io.on("connection", function(socket){
-  // var filter = ['webdeveloper', 'web developer', 'webdev']
-  var filter = 'korea'
+  var filter = ['webdeveloper', 'web developer', 'webdev']
     , stream = T.stream('statuses/filter', { track: filter } )
 
   stream.on('tweet', function (data) {
@@ -89,7 +83,12 @@ io.on("connection", function(socket){
            pic         : pic,
            tweetText   : tweetText
       }
-    new tweet(parameters)
+
+    var streamTweet = new Tweet(parameters);
+    streamTweet.save(function (err) {
+      if (err)
+      console.log('bark');
+    });
     io.sockets.emit('newTweet', {tweet: parameters})
   })
 })
