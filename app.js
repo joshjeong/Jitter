@@ -25,28 +25,20 @@ db.once('open', function callback(){
 });
 
 var tweetSchema = mongoose.Schema({
-                screenName: String 
-                // date: String, 
-                // pic: String, 
-                // tweet: String
+            screenName : String, 
+            date       : String, 
+            pic        : String, 
+            tweetText  : String
 });
 
-var Tweet = mongoose.model('tweets', {screenName: String});
+var tweet = mongoose.model('job', tweetSchema);
 
 
-var test = new Tweet({
-                screenName: "josh"
-              // , date: "March 1"
-              // , pic: "www.something.com"
-              // , tweet: "hello world!"
-})
-
-
-app.get('/tweets', function(req, res){
-  mongoose.model('tweets').find(function(err, tweets){
-    res.send(tweets)
-  })
-})
+// app.get('/tweets', function(req, res){
+//   mongoose.model('tweets').find(function(err, tweets){
+//     res.send(tweets)
+//   })
+// })
 
 
 /* Server config */
@@ -82,11 +74,23 @@ app.get("/", function(request, response) {
 
 
 io.on("connection", function(socket){
-
-  var stream = T.stream('statuses/filter', { track: 'food' })
+  // var filter = ['webdeveloper', 'web developer', 'webdev']
+  var filter = 'korea'
+    , stream = T.stream('statuses/filter', { track: filter } )
 
   stream.on('tweet', function (data) {
-    io.sockets.emit('newTweet', {tweet: data})
+    var tweetText = data.text
+      , screenName = data.user.screen_name
+      , date = data.created_at
+      , pic = data.user.profile_image_url
+      , parameters = {
+           screenName  : screenName,
+           date        : date,
+           pic         : pic,
+           tweetText   : tweetText
+      }
+    new tweet(parameters)
+    io.sockets.emit('newTweet', {tweet: parameters})
   })
 })
 
