@@ -6,6 +6,7 @@
     "jade": "1.4.2",
     "mongodb": "^1.4.19",
     "mongoose": "^3.8.18",
+    "node-geocoder": "^2.9.2",
     "socket.io": "1.0.6",
     "twit": "*",
     "underscore": "1.6.0",
