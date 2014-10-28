@@ -9,37 +9,16 @@ html{
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;*/
-
 }
 
 #tweet-river{
-  width: 50rem;
-  padding: 5px;
-  position: absolute;
-  top: 5rem;
-  left: -25rem;
-  margin-left: 50%;
-  height: 50rem;
-  overflow: scroll;
-  border: 5px solid #343434;
+  width: 77rem;
 }
 
-
 #filter{
-  border: 1px solid white;
-  height: 10rem;
-  border: 1rem solid #343434;
-  top: 5rem;
-  left: 10rem;
 }
 
 #filter-input{
-  /*border: none;*/
-  position: absolute;
-  outline: none;
-  text-align: center;
-  width: 20rem;
-  margin: auto;
 }
 
 .pic{
@@ -47,15 +26,18 @@ html{
 }
 
 .username{
-  font-size: 1.4rem;
-  font-weight: 900;
 }
 
 .time{
-  color: lightgrey;
 }
 
 .tweet{
-  padding: 1rem;
-  border-bottom: 2px solid lightgrey;
+}
+
+.inline{
+  display:inline;
+}
+
+.inline-block{
+  display: inline-block;
 }
