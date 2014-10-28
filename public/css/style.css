@@ -13,13 +13,15 @@ html{
 }
 
 #tweet-river{
+  width: 50rem;
   padding: 5px;
   position: absolute;
   top: 5rem;
-  right: 10rem;
+  left: -25rem;
+  margin-left: 50%;
   height: 50rem;
   overflow: scroll;
-  border: 1rem solid #343434;
+  border: 5px solid #343434;
 }
 
 

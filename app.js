@@ -6,7 +6,8 @@ var express = require("express")
   , _ = require("underscore")
   , dotenv = require('dotenv')
   , Twit = require('twit')
-  , util = require('util');
+  , util = require('util')
+  , mongoose = require('mongoose');
 
 dotenv.load();
 
@@ -17,6 +18,24 @@ var T = new Twit({
   , access_token_secret: process.env.ACCESS_TOKEN_SECRET
 });
 
+var db = mongoose.connection;
+
+var tweetSchema = mongoose.Schema({
+    screenName : String
+  , date       : Date
+  , pic        : String
+  , tweetText  : String
+});
+
+var Tweet = mongoose.model('Tweet', tweetSchema);
+
+
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback(){
+  
+});
+
+mongoose.connect('mongodb://localhost/test')
 
 /* Server config */
 
@@ -44,30 +63,35 @@ app.use(bodyParser.json());
 app.get("/", function(request, response) {
 
   //Render the view called "index"
-  // var filterOptions = ['Front End', 'Back']
   response.render("index");
 
 });
 
 
-// Stream sample public tweets
-var stream = T.stream('statuses/sample')
+io.on("connection", function(socket){
+  var filter = ['webdeveloper', 'web developer', 'webdev']
+    , stream = T.stream('statuses/filter', { track: filter } )
 
-// Stream based on filter
-// var stream = T.stream('statuses/filter', { track: 'webdeveloper' })
+  stream.on('tweet', function (data) {
+    var tweetText = data.text
+      , screenName = data.user.screen_name
+      , date = data.created_at
+      , pic = data.user.profile_image_url
+      , parameters = {
+           screenName  : screenName,
+           date        : date,
+           pic         : pic,
+           tweetText   : tweetText
+      }
 
-// Stream based on location
-// var stream = T.stream('statuses/filter', { locations: sanFrancisco })
-
-//  search twitter for all tweets containing the word 'banana' since Nov. 11, 2011
-//
-
-
-// Start stream
-stream.on('tweet', function (tweet) {
-  io.sockets.emit("newTweet", {tweet: tweet})
+    var streamTweet = new Tweet(parameters);
+    streamTweet.save(function (err) {
+      if (err)
+      console.log('bark');
+    });
+    io.sockets.emit('newTweet', {tweet: parameters})
+  })
 })
-
 
 // Start server
 http.listen(app.get("port"), app.get("ipaddr"), function() {
