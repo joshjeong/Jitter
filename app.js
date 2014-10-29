@@ -11,7 +11,6 @@ var express = require("express")
   , Twit = require('twit')
   , util = require('util')
   , geocoder = require('node-geocoder').getGeocoder(geocoderProvider, httpAdapter, extra)
-  , fs = require('fs')
   , mongoose = require('mongoose');
 
 
@@ -31,14 +30,9 @@ var extra = {
 
 var db = mongoose.connection;
 
-// fs.readdirSync(__dirname + '/models').forEach(function(filename){
-//   if(~filename.indexOf('.js')){
-//     var test = require(__dirname + '/models/' + filename)  
-//     console.log(__dirname + '/models/' + filename)
-//   } 
-// })
 
-var tweetModel = require('./models/tweet.js')
+require('./routes/routes')(app);
+var Tweet = require('./models/tweet')
 
 
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -54,16 +48,12 @@ app.set("view engine", "jade");
 app.use(express.static("public", __dirname + "/public"));
 app.use(bodyParser.json());
 
-app.get("/", function(request, response) {
-  response.render("index");
-});
 
 app.get("/filter", function(req, res){
   mongoose.model('Tweet').find(function(err,tweet){
     res.send(tweet)
   })
 })
-
 
 io.on("connection", function(socket){
   // var filter = ['webdeveloper', 'web developer', 'webdev']
@@ -94,7 +84,6 @@ io.on("connection", function(socket){
 
         geocoder.reverse(latitude, longitude, function(err, res) {
           var locInfo = res.shift()
-            , streamTweet = new tweetModel(parameters);
 
           parameters.loc = {
             country : locInfo.country,
@@ -102,16 +91,7 @@ io.on("connection", function(socket){
             state   : locInfo.state
           };
           
-          // Tweet.findOne({ tweetId: tweetId }, function (err, doc) {
-          //   if (err){
-          //     console.log('error when saving')
-          //   }
-          //   console.log('this is doc')
-          //   doc = parameters;
-          //   console.log(doc)
-          //   doc.save(function(){});
-          // })
-
+          var streamTweet = new Tweet(parameters);
 
           streamTweet.save(function (err) {
           if (err)
