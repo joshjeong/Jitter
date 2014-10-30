@@ -13,12 +13,11 @@ function init() {
       , screenName = data.tweet.screenName
       , date = data.tweet.date
       , pic = data.tweet.pic
-      , coord = data.tweet.coord
+      , loc = data.tweet.loc
 
 
     if(tweetText.indexOf("") > -1){
-      console.log(coord)
-      $('#tweet-river').prepend("<a href='#' class='img-circle col-md-1 pic inline'><img src=" + pic + "></a><span class='username col-md-6 inline'>" + screenName +"</span>"+"<span class='time col-md-6 inline'>"+ date+"</span><div class = 'tweet col-md-11 inline-block'>"+tweetText+"</div>")
+      $('#tweet-river').prepend("<a href='#' class='col-md-1 pic inline'><img class ='img-circle' src=" + pic + "></a><span class='username col-md-6 inline'>" + screenName +"</span>"+"<span class='time col-md-6 inline'>"+ date+"</span><div class = 'tweet col-md-11 inline-block'>"+tweetText+"</div>")
     }
   })
  }
