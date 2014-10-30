@@ -30,7 +30,7 @@ var extra = {
 
 var db = mongoose.connection;
 
-
+// Do routes need var?
 require('./routes/routes')(app);
 var Tweet = require('./models/tweet')
 
@@ -57,6 +57,7 @@ app.get("/filter", function(req, res){
 
 io.on("connection", function(socket){
   // var filter = ['webdeveloper', 'web developer', 'webdev']
+  // using "food" temporarily to generate more test tweets
   var filter = ['food']
     , stream = T.stream('statuses/filter', { track: filter } )
 
@@ -93,14 +94,17 @@ io.on("connection", function(socket){
           
           var streamTweet = new Tweet(parameters);
 
+          // Need to disable saving duplicates
           streamTweet.save(function (err) {
           if (err)
             console.log('bark');
           });
-          
+
           io.sockets.emit('newTweet', {tweet: parameters})
         })
       }
+
+      // What if tweet has no location?
       // else if(userLocation!=''){
       //   console.log(userLocation)
       // }
