@@ -28,15 +28,17 @@ var extra = {
   formatter: null
 }
 
-var db = mongoose.connection;
 
 // Do routes need var?
 require('./routes/routes')(app);
+
+var db = mongoose.connection;
 var Tweet = require('./models/tweet')
 
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback(){ 
+  Tweet.tweetSchema;
 });
 
 mongoose.connect('mongodb://localhost/test')
@@ -94,16 +96,20 @@ io.on("connection", function(socket){
           
           var streamTweet = new Tweet(parameters);
 
-          // Need to disable saving duplicates
-          streamTweet.save(function (err) {
-          if (err)
-            console.log('bark');
-          });
 
-          io.sockets.emit('newTweet', {tweet: parameters})
+
+          Tweet.find({ tweetId: parameters.tweetId }, function(err, tweet){
+            if (err) return handleError(err);
+            if (tweet.length == 0){
+              streamTweet.save(function (error) {
+              if (error)
+                console.log('bark');
+              });
+              io.sockets.emit('newTweet', {tweet: parameters})
+            }
+          })
         })
       }
-
       // What if tweet has no location?
       // else if(userLocation!=''){
       //   console.log(userLocation)
