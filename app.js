@@ -52,9 +52,14 @@ app.use(bodyParser.json());
 
 
 app.get("/filter", function(req, res){
-  mongoose.model('Tweet').find(function(err,tweet){
-    res.send(tweet)
-  })
+  // mongoose.model('Tweet').find(function(err,tweet){
+  //   res.send(tweet)
+  // })
+  var filterName = req.query.filterName
+
+  
+  
+  res.send('hello')
 })
 
 io.on("connection", function(socket){
@@ -97,19 +102,22 @@ io.on("connection", function(socket){
           var streamTweet = new Tweet(parameters);
 
 
-
-          Tweet.find({ tweetId: parameters.tweetId }, function(err, tweet){
-            if (err) return handleError(err);
-            if (tweet.length == 0){
-              streamTweet.save(function (error) {
-              if (error)
-                console.log('bark');
-              });
-              io.sockets.emit('newTweet', {tweet: parameters})
-            }
-          })
+          // Saves tweet if unique
+          // Tweet.find({ tweetId: parameters.tweetId }, function(err, tweet){
+          //   if (err) return handleError(err);
+          //   if (tweet.length == 0){
+          //     streamTweet.save(function (error) {
+          //     if (error)
+          //       console.log('bark');
+          //     });
+          //   }
+          // })
         })
       }
+      
+      // io.sockets.emit('newTweet', {tweet: parameters})
+      
+
       // What if tweet has no location?
       // else if(userLocation!=''){
       //   console.log(userLocation)
