@@ -17,11 +17,14 @@ html
             option(value='frontend') Front End
             option(value='backend') Back End
             option(value='fullstack') Full Stack
-          input(type = 'button' value = 'Apply')
+          input(id = 'filter-btn' type = 'button' value = 'Apply')
 
       .row#tweet-river
 
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
     script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
     script(src='/socket.io/socket.io.js')    
-    script(src='/js/index.js')    
+    script(src='/js/index.js')
+    script(src='/js/namespace.js')    
+    script(src='/js/filter.js')    
+
