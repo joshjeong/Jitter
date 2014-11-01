@@ -10,6 +10,15 @@ html
   body
     .container
       .row#filter-container
+        form#filter-form
+          select
+            option(value='') -Select a Filter-
+            option(value='all') All
+            option(value='frontend') Front End
+            option(value='backend') Back End
+            option(value='fullstack') Full Stack
+          input(type = 'button' value = 'Apply')
+
       .row#tweet-river
 
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
