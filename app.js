@@ -52,14 +52,38 @@ app.use(bodyParser.json());
 
 
 app.get("/filter", function(req, res){
-  // mongoose.model('Tweet').find(function(err,tweet){
-  //   res.send(tweet)
-  // })
-  var filterName = req.query.filterName
 
+  var TweetRetriever = function(){
+    this.filterName = req.query.filterName
+    this.allTweets = []
+  }
   
-  
-  res.send('hello')
+  TweetRetriever.prototype = {
+    
+    retrieveTweets: function(){
+      var self = this
+
+      mongoose.model('Tweet').find(function(err,tweets){
+        self.filterTweets(tweets)
+      })
+    },
+
+    filterTweets: function(tweets){
+      var self = this
+        , filteredTweets = []
+      for( i in tweets){
+        var tweet = tweets[i]
+          , words = tweet.tweetText.split(' ')
+        if(words.indexOf(this.filterName)!=-1){
+          filteredTweets.push(tweet) 
+        }
+      }
+      res.send(filteredTweets)
+    }
+  }
+
+  var t = new TweetRetriever;
+  t.retrieveTweets();
 })
 
 io.on("connection", function(socket){
