@@ -28,8 +28,6 @@ var extra = {
   formatter: null
 }
 
-
-// Do routes need var?
 require('./routes/routes')(app);
 
 var db = mongoose.connection;
@@ -55,6 +53,7 @@ app.get("/filter", function(req, res){
 
   var TweetRetriever = function(){
     this.filterName = req.query.filterName
+    this.filterLocation = req.query.filterLocation
     this.allTweets = []
   }
   
@@ -69,6 +68,12 @@ app.get("/filter", function(req, res){
     },
 
     filterTweets: function(tweets){
+      var firstFilter = this.filterByPosition(tweets)
+        , secondFilter = this.filterByLocation(firstFilter)
+      res.send(secondFilter)
+    },
+
+    filterByPosition: function(tweets){
       var self = this
         , filteredTweets = []
       for( i in tweets){
@@ -78,7 +83,20 @@ app.get("/filter", function(req, res){
           filteredTweets.push(tweet) 
         }
       }
-      res.send(filteredTweets)
+      return filteredTweets
+    }, 
+
+    filterByLocation: function(tweets){
+      var self = this
+        , filteredTweets = []
+      for( i in tweets){
+        var tweet = tweets[i]
+          , location = tweet.loc.state
+        if(location == this.filterLocation){
+          filteredTweets.push(tweet) 
+        }
+      }
+      return filteredTweets
     }
   }
 
@@ -127,15 +145,15 @@ io.on("connection", function(socket){
 
 
           // Saves tweet if unique
-          // Tweet.find({ tweetId: parameters.tweetId }, function(err, tweet){
-          //   if (err) return handleError(err);
-          //   if (tweet.length == 0){
-          //     streamTweet.save(function (error) {
-          //     if (error)
-          //       console.log('bark');
-          //     });
-          //   }
-          // })
+          Tweet.find({ tweetId: parameters.tweetId }, function(err, tweet){
+            if (err) return handleError(err);
+            if (tweet.length == 0){
+              streamTweet.save(function (error) {
+              if (error)
+                console.log('bark');
+              });
+            }
+          })
         })
       }
       
