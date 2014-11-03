@@ -1,8 +1,9 @@
 var express = require('express')
-  , app = express();
+  , app = express()
+  , states = require('../models/states')
 
 module.exports = function(app){
-  app.get("/", function(request, response) {
-    response.render("index");
+  app.get("/", function(req, res) {
+    res.render("index", {states: states});
   });
 }

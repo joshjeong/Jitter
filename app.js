@@ -28,8 +28,6 @@ var extra = {
   formatter: null
 }
 
-
-// Do routes need var?
 require('./routes/routes')(app);
 
 var db = mongoose.connection;
@@ -52,9 +50,58 @@ app.use(bodyParser.json());
 
 
 app.get("/filter", function(req, res){
-  mongoose.model('Tweet').find(function(err,tweet){
-    res.send(tweet)
-  })
+
+  var TweetRetriever = function(){
+    this.filterName = req.query.filterName
+    this.filterLocation = req.query.filterLocation
+    this.allTweets = []
+  }
+  
+  TweetRetriever.prototype = {
+    
+    retrieveTweets: function(){
+      var self = this
+
+      mongoose.model('Tweet').find(function(err,tweets){
+        self.filterTweets(tweets)
+      })
+    },
+
+    filterTweets: function(tweets){
+      var firstFilter = this.filterByPosition(tweets)
+        , secondFilter = this.filterByLocation(firstFilter)
+      res.send(secondFilter)
+    },
+
+    filterByPosition: function(tweets){
+      var self = this
+        , filteredTweets = []
+      for( i in tweets){
+        var tweet = tweets[i]
+          , words = tweet.tweetText.split(' ')
+        if(words.indexOf(this.filterName)!=-1){
+          filteredTweets.push(tweet) 
+        }
+      }
+      return filteredTweets
+    }, 
+
+    filterByLocation: function(tweets){
+      var self = this
+        , filteredTweets = []
+      for( i in tweets){
+        var tweet = tweets[i]
+          , location = tweet.loc.state
+        if(location == this.filterLocation){
+          filteredTweets.push(tweet) 
+        }
+      }
+      return filteredTweets
+    }
+  }
+
+  var t = new TweetRetriever;
+  t.retrieveTweets();
 })
 
 io.on("connection", function(socket){
@@ -97,7 +144,7 @@ io.on("connection", function(socket){
           var streamTweet = new Tweet(parameters);
 
 
-
+          // Saves tweet if unique
           Tweet.find({ tweetId: parameters.tweetId }, function(err, tweet){
             if (err) return handleError(err);
             if (tweet.length == 0){
@@ -105,11 +152,14 @@ io.on("connection", function(socket){
               if (error)
                 console.log('bark');
               });
-              io.sockets.emit('newTweet', {tweet: parameters})
             }
           })
         })
       }
+      
+      // io.sockets.emit('newTweet', {tweet: parameters})
+      
+
       // What if tweet has no location?
       // else if(userLocation!=''){
       //   console.log(userLocation)
