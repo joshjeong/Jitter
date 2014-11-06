@@ -9,19 +9,20 @@ html
     title Twitter Job Finder
   body
     .container
-      .row#filter-container
-        form#filter-form
-          select
-            option(value='') -Select a Filter-
-            option(value='I') I
-            option(value='frontend') Front End
-            option(value='backend') Back End
-            option(value='fullstack') Full Stack
-          select
-            each val, index in states
-              option(value= val)= index
-          input(id = 'filter-btn' type = 'button' value = 'Apply')
-      .row#tweet-river
+      .row
+        .col-md-3#filter-container
+          form#filter-form
+            select.form-control#select-location
+              option(value='') -Select a Filter-
+              option(value='I') I
+              option(value='frontend') Front End
+              option(value='backend') Back End
+              option(value='fullstack') Full Stack
+            select.form-control
+              each val, index in states
+                option(value= val)= index
+            input.form-control.btn.btn-primary.btn-lrg(id = 'filter-btn' type = 'button' value = 'Apply')
+        .col-md-7#tweet-river
 
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
     script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
