@@ -11,4 +11,4 @@ var tweetSchema = new mongoose.Schema({
   , loc        : Object
 });
   
-module.exports = mongoose.model('Tweet', tweetSchema);
+module.exports = mongoose.model('TweetModel', tweetSchema);
