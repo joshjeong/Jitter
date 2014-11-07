@@ -29,17 +29,18 @@ var extra = {
 }
 
 require('./routes/routes')(app);
+states = require('./models/states.js');
 
 var db = mongoose.connection;
-var Tweet = require('./models/tweet')
+var TweetModel = require('./models/tweet')
 
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback(){ 
-  Tweet.tweetSchema;
+  TweetModel.tweetSchema;
 });
 
-mongoose.connect('mongodb://localhost/test')
+mongoose.connect('mongodb://localhost/tweetdatabase')
 
 app.set("ipaddr", "127.0.0.1");
 app.set("port", 8080);
@@ -62,7 +63,7 @@ app.get("/filter", function(req, res){
     retrieveTweets: function(){
       var self = this
 
-      mongoose.model('Tweet').find(function(err,tweets){
+      mongoose.model('TweetModel').find(function(err,tweets){
         self.filterTweets(tweets)
       })
     },
@@ -70,6 +71,7 @@ app.get("/filter", function(req, res){
     filterTweets: function(tweets){
       var firstFilter = this.filterByPosition(tweets)
         , secondFilter = this.filterByLocation(firstFilter)
+        console.log('sec filter paplied')
       res.send(secondFilter)
     },
 
@@ -105,29 +107,66 @@ app.get("/filter", function(req, res){
 })
 
 io.on("connection", function(socket){
-  // var filter = ['webdeveloper', 'web developer', 'webdev']
-  // using "food" temporarily to generate more test tweets
-  var filter = ['food']
+  var filter = ['hiring', 'webdeveloper', 'web developer', 'webdev', 'recruiting']
     , stream = T.stream('statuses/filter', { track: filter } )
 
   stream.on('tweet', function (data) {
+    var Tweet = function(data){
+      this.tweetText = data.text;
+      this.tweetId = data.id;
+      this.screenName = data.user.screen_name;
+      this.date = data.created_at;
+      this.pic = data.user.profile_image_url;
+      this.hasCoord = data.coordinates;
+      this.userLocation = data.user.location;
+      this.parameters = {
+            tweetId     : this.tweetId,
+            screenName  : this.screenName,
+            date        : this.date,
+            pic         : this.pic,
+            tweetText   : this.tweetText
+      }
+    };
 
-    var tweetText = data.text
-      , tweetId = data.id
-      , screenName = data.user.screen_name
-      , date = data.created_at
-      , pic = data.user.profile_image_url
-      , hasCoord = data.coordinates
-      , userLocation = data.user.location
-      , parameters = {
-           tweetId     : tweetId
-         , screenName  : screenName
-         , date        : date
-         , pic         : pic
-         , tweetText   : tweetText
-      };
+    Tweet.prototype = {
+      save: function(parameters){
+        var streamTweet = new TweetModel(parameters);
 
-      if(hasCoord!=null){
+        TweetModel.find({ tweetId: parameters.tweetId }, function(err, tweet){
+          console.log('find')
+          if (err) return handleError(err);
+          if (tweet.length == 0){
+            streamTweet.save(function (error) {
+              console.log('saved')
+            if (error)
+              console.log('bark');
+            });
+          }
+        })
+      }
+    };
+
+
+    var t = new Tweet(data)
+
+      if(t.hasCoord==null){
+        var words = t.tweetText.replace(/[^\w\s]/gi, '').split(' ')
+        for(var word in words){
+          if(states[word.toUpperCase()]!= undefined){
+            console.log('Tweet has State in text')
+            t.parameters.loc ={
+              country: "United States",
+              state: states[word.toUpperCase()]
+            }
+            console.log('Create Location')
+            t.save(t.parameters);
+          }
+        }
+
+
+      }
+
+      if(t.hasCoord!=null){
         var coord = data.coordinates.coordinates
           , longitude = coord.shift()
           , latitude = coord.shift();
@@ -135,29 +174,19 @@ io.on("connection", function(socket){
         geocoder.reverse(latitude, longitude, function(err, res) {
           var locInfo = res.shift()
 
-          parameters.loc = {
+          t.parameters.loc = {
             country : locInfo.country,
             city    : locInfo.city,
             state   : locInfo.state
           };
-          
-          var streamTweet = new Tweet(parameters);
-
-
-          // Saves tweet if unique
-          Tweet.find({ tweetId: parameters.tweetId }, function(err, tweet){
-            if (err) return handleError(err);
-            if (tweet.length == 0){
-              streamTweet.save(function (error) {
-              if (error)
-                console.log('bark');
-              });
-            }
-          })
+          console.log('Location found')
+          t.save(t.parameters);
         })
       }
+
       
-      // io.sockets.emit('newTweet', {tweet: parameters})
+      
+      // io.sockets.emit('newTweet', {tweet: t.parameters})
       
 
       // What if tweet has no location?
