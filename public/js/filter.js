@@ -15,9 +15,10 @@ Filter.Controller.prototype = {
 
   filterBtnListener: function(){
     var self = this;
-    $('#filter-btn').on('click', function(){
+    $('#filter-btn').on('click', function(e){
+      e.preventDefault();      
       self.filterTweets($(this));
-    })    
+    })     
   },
 
   filterTweets: function(button){
@@ -36,8 +37,7 @@ Filter.Controller.prototype = {
           , date       = tweet.date
           , pic        = tweet.pic
           , loc        = tweet.loc
-          console.log(tweet.tweetId)
-        $('#tweet-river').prepend("<a href='#' class='col-md-1 pic inline'><img class ='img-circle' src=" + pic + "></a><span class='username col-md-6 inline'>" + screenName +"</span>"+"<span class='time col-md-6 inline'>"+ date+"</span><div class = 'tweet col-md-11 inline-block'>"+tweetText+"</div>")
+        $('#tweet-river').prepend("<div class = 'row tweet-container'><img class ='col-md-2 img-circle img-responsive center-block inline-block' src=" + pic + "><div class='username col-md-10 inline-block'>" + screenName +"</div>"+"<div class='time col-md-10 inline-block'>"+ date+"</div><div class = 'tweet col-md-10 inline-block'>"+tweetText+"</div></div>")
       }
     })
   }

@@ -13,12 +13,19 @@ html{
 
 #tweet-river{
   width: 60rem;
+  padding: 15px;
+}
+
+.tweet-container{
+  border: 1px solid #EEE;
+  border: collapse;
+  padding: 7px;
 }
 
 #filter{
 }
 
-#filter-input{
+#select-location{
 }
 
 .pic{
@@ -26,6 +33,7 @@ html{
 }
 
 .username{
+  font-weight: 900;
 }
 
 .time{

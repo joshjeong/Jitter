@@ -17,7 +17,7 @@ function init() {
 
 
     if(tweetText.indexOf("") > -1){
-      $('#tweet-river').prepend("<a href='#' class='col-md-1 pic inline'><img class ='img-circle' src=" + pic + "></a><span class='username col-md-6 inline'>" + screenName +"</span>"+"<span class='time col-md-6 inline'>"+ date+"</span><div class = 'tweet col-md-11 inline-block'>"+tweetText+"</div>")
+      $('#tweet-river').prepend("<a href='#' class='col-md-4 pic'><img class ='img-circle img-responsive center-block inline-block' src=" + pic + "></a><div class='username col-md-8 inline-block'>" + screenName +"</div>"+"<div class='time col-md-8 inline-block'>"+ date+"</div><div class = 'tweet col-md-8 inline-block'>"+tweetText+"</div>")
     }
   })
  }
