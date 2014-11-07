@@ -52,9 +52,9 @@ app.use(bodyParser.json());
 
 app.get("/filter", function(req, res){
 
-  var TweetRetriever = function(){
-    this.filterName = req.query.filterName
-    this.filterLocation = req.query.filterLocation
+  var TweetRetriever = function(filterName, filterLocation){
+    this.filterName = filterName
+    this.filterLocation = filterLocation
     this.allTweets = []
   }
   
@@ -71,8 +71,7 @@ app.get("/filter", function(req, res){
     filterTweets: function(tweets){
       var firstFilter = this.filterByPosition(tweets)
         , secondFilter = this.filterByLocation(firstFilter)
-        console.log('sec filter paplied')
-      res.send(secondFilter)
+        res.send(secondFilter)
     },
 
     filterByPosition: function(tweets){
@@ -80,7 +79,7 @@ app.get("/filter", function(req, res){
         , filteredTweets = []
       for( i in tweets){
         var tweet = tweets[i]
-          , words = tweet.tweetText.split(' ')
+          , words = tweet.tweetText.toUpperCase().replace(/[^\w\s]/gi, '').split(' ')
         if(words.indexOf(this.filterName)!=-1){
           filteredTweets.push(tweet) 
         }
@@ -102,7 +101,7 @@ app.get("/filter", function(req, res){
     }
   }
 
-  var t = new TweetRetriever;
+  var t = new TweetRetriever(req.query.filterName.toUpperCase(), req.query.filterLocation);
   t.retrieveTweets();
 })
 
