@@ -1,4 +1,6 @@
-var states = {AL: "Alabama", 
+var states = {
+              ALL: "All",
+              AL: "Alabama", 
               AK: "Alaska", 
               AZ: "Arizona", 
               AR: "Arkansas", 
