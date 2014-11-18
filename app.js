@@ -90,14 +90,19 @@ app.get("/filter", function(req, res){
     filterByLocation: function(tweets){
       var self = this
         , filteredTweets = []
-      for( i in tweets){
-        var tweet = tweets[i]
-          , location = tweet.loc.state
-        if(location == this.filterLocation){
-          filteredTweets.push(tweet) 
-        }
+      if(this.filterLocation=="All"){
+        return tweets
       }
-      return filteredTweets
+      else{
+        for( i in tweets){
+          var tweet = tweets[i]
+            , location = tweet.loc.state
+          if(location == this.filterLocation){
+            filteredTweets.push(tweet) 
+          }
+        }
+        return filteredTweets
+      }
     }
   }
 
@@ -147,51 +152,44 @@ io.on("connection", function(socket){
 
 
     var t = new Tweet(data)
-
+      // If tweet does not have coordinates,
+      // Iterate through tweet text for state initials
       if(t.hasCoord==null){
         var words = t.tweetText.replace(/[^\w\s]/gi, '').split(' ')
-        for(var word in words){
-          if(states[word.toUpperCase()]!= undefined){
-            console.log('Tweet has State in text')
+        for(var i in words){
+          if(states[words[i].toUpperCase()]!= undefined){
             t.parameters.loc ={
               country: "United States",
-              state: states[word.toUpperCase()]
+              state: states[words[i].toUpperCase()]
             }
-            console.log('Create Location')
             t.save(t.parameters);
           }
         }
-
-
       }
 
+      // If tweet has coordinates
       if(t.hasCoord!=null){
         var coord = data.coordinates.coordinates
           , longitude = coord.shift()
           , latitude = coord.shift();
 
         geocoder.reverse(latitude, longitude, function(err, res) {
-          var locInfo = res.shift()
+          // if(res.shift()){
+            var locInfo = res.shift()
 
-          t.parameters.loc = {
-            country : locInfo.country,
-            city    : locInfo.city,
-            state   : locInfo.state
-          };
-          console.log('Location found')
-          t.save(t.parameters);
+            t.parameters.loc = {
+              country : locInfo.country,
+              city    : locInfo.city,
+              state   : locInfo.state
+            };
+            console.log('Location found')
+            t.save(t.parameters);
+          // }
         })
       }
 
-      
-      
       // io.sockets.emit('newTweet', {tweet: t.parameters})
-      
 
-      // What if tweet has no location?
-      // else if(userLocation!=''){
-      //   console.log(userLocation)
-      // }
 
   })
 })
