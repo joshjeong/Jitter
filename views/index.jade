@@ -9,8 +9,8 @@ html
     title Twitter Job Finder
   body
     .container
-      .row
-        .col-md-3#filter-container
+      .row#container-row
+        .col-md-4#filter-container
           form#filter-form
             input.form-control#job-title(placeholder = "Job title...")
             //- select.form-control#select-location
@@ -23,7 +23,7 @@ html
               each val, index in states
                 option(value= val)= index
             input.form-control.btn.btn-primary.btn-lrg(id = 'filter-btn' type = 'button' value = 'Apply')
-        .col-md-5#tweet-river
+        .col-md-8#tweet-river
 
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
     script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')

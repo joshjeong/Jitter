@@ -11,13 +11,20 @@ html{
   background-size: cover;*/
 }
 
+.container{
+  border: 1px solid #EEE;
+  margin: 5rem 1rem;
+}
+
 #tweet-river{
-  width: 60rem;
-  padding: 15px;
+}
+
+#container-row{
+  margin: 1rem;
 }
 
 .tweet-container{
-  border: 1px solid #EEE;
+  border-top: 1px solid #EEE;
   border: collapse;
   padding: 7px;
 }
