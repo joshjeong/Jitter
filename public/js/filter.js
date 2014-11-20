@@ -3,6 +3,7 @@ $(document).ready(function(){
   fController.bindListeners();
 });
 
+Filter = {}
 
 Filter.Controller = function(view){
   this.view = new view;
