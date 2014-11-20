@@ -14,40 +14,30 @@ html{
 .container{
   border: 1px solid #EEE;
   margin: 5rem 1rem;
+  #container-row{
+    margin: 1rem;
+    a{
+      text-decoration: none;
+      color: black;
+    }
+    #tweet-river{
+      overflow: scroll;
+      height: 52rem;
+      .tweet-container{
+        border-top: 1px solid #EEE;
+        border: collapse;
+        padding: 7px;
+        .username{
+          font-weight: 900;
+        }
+        .time{
+          color: lightgrey;
+        }
+      }
+    }
+  }
 }
 
-#tweet-river{
-}
-
-#container-row{
-  margin: 1rem;
-}
-
-.tweet-container{
-  border-top: 1px solid #EEE;
-  border: collapse;
-  padding: 7px;
-}
-
-#filter{
-}
-
-#select-location{
-}
-
-.pic{
-
-}
-
-.username{
-  font-weight: 900;
-}
-
-.time{
-}
-
-.tweet{
-}
 
 .inline{
   display:inline;
