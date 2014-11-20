@@ -1,15 +1,39 @@
 {
+  "name": "JobTracker",
+  "version": "0.1.0",
+  "description": "Utilizes twitter's firehose API to filter web developer jobs by position and location",
+  "main": "app.js",
   "dependencies": {
-    "body-parser": "1.4.3",
-    "dotenv": "0.4.0",
-    "express": "4.6.1",
-    "jade": "1.4.2",
+    "body-parser": "^1.4.3",
+    "dotenv": "^0.4.0",
+    "express": "^4.6.1",
+    "grunt": "^0.4.5",
     "mongodb": "^1.4.19",
+    "jade": "^1.4.2",
     "mongoose": "^3.8.18",
     "node-geocoder": "^2.9.2",
-    "socket.io": "1.0.6",
-    "twit": "*",
-    "underscore": "1.6.0",
-    "util": "*"
-  }
+    "socket.io": "^1.0.6",
+    "twit": "^1.1.18",
+    "underscore": "^1.6.0",
+    "util": "^0.10.3"
+  },
+  "devDependencies": {
+    "grunt-contrib-sass": "^0.8.1",
+    "grunt-contrib-uglify": "^0.6.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "load-grunt-tasks": "^1.0.0"
+  },
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joshjeong/job.git"
+  },
+  "author": "Josh Jeong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joshjeong/job/issues"
+  },
+  "homepage": "https://github.com/joshjeong/job"
 }
