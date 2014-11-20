@@ -13,12 +13,6 @@ html
         .col-md-4#filter-container
           form#filter-form
             input.form-control#job-title(placeholder = "Job title...")
-            //- select.form-control#select-location
-            //-   option(value='') -Select a Filter-
-            //-   option(value='I') I
-            //-   option(value='frontend') Front End
-            //-   option(value='backend') Back End
-            //-   option(value='fullstack') Full Stack
             select.form-control#filter-location
               each val, index in states
                 option(value= val)= index
