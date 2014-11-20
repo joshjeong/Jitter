@@ -26,22 +26,34 @@ Filter.Controller.prototype = {
     this.view.clearRiver();
     var filterName = button.siblings().first().val()
       , filterLocation = button.siblings().last().val()
+      , self = this;
     $.ajax({
       url: '/filter',
       type: 'GET',
       data: {filterName: filterName, filterLocation: filterLocation}
     }).done(function(tweetObjects){
       for(i in tweetObjects){
-        var tweet      = tweetObjects[i]
-          , tweetText  = tweet.tweetText
-          , screenName = tweet.screenName
-          , date       = tweet.date
-          , pic        = tweet.pic
-          , loc        = tweet.loc
-        $('#tweet-river').prepend("<div class = 'row tweet-container'><img class ='col-md-2 img-circle img-responsive center-block inline-block' src=" + pic + "><div class='username col-md-10 inline-block'>" + screenName +"</div>"+"<div class='time col-md-10 inline-block'>"+ date+"</div><div class = 'tweet col-md-10 inline-block'>"+tweetText+"</div></div>")
+        var tweet      = tweetObjects[i], 
+            tweetText  = tweet.tweetText, 
+            screenName = tweet.screenName, 
+            date       = self.formatDate(tweet.date), 
+            pic        = tweet.pic, 
+            loc        = tweet.loc,
+            url        = "https://www.twitter.com/"+ screenName
+        $('#tweet-river').prepend("<a href='"+url+"'><div class = 'row tweet-container'><img class ='col-md-2 img-circle img-responsive center-block inline-block' src=" + pic + "><div class='username col-md-7 inline-block'>" + screenName +"</div>"+"<div class='time col-md-3 inline-block'>"+ date+"</div><div class = 'tweet col-md-10 inline-block'>"+tweetText+"</div></div></a>")
       }
     })
+  },
+
+  formatDate: function(utc){
+    var dateAndTime = new Date(utc).toString(),
+        date        = dateAndTime.split(' '),
+        month       = date[1].toString(),
+        day         = date[2].toString(),
+        year        = date [3].toString()
+    return month+" "+day+", "+ year
   }
+
 }
 
 Filter.View = function(){}
