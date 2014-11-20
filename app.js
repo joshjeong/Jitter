@@ -137,14 +137,17 @@ io.on("connection", function(socket){
         var streamTweet = new TweetModel(parameters);
 
         TweetModel.find({ tweetId: parameters.tweetId }, function(err, tweet){
-          console.log('find')
+          console.log('duplicate found')
           if (err) return handleError(err);
           if (tweet.length == 0){
             streamTweet.save(function (error) {
               console.log('saved')
             if (error)
-              console.log('bark');
+              console.log('ERROR');
             });
+          }
+          else {
+            console.log('Dont save')
           }
         })
       }
