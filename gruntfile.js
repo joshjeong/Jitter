@@ -19,7 +19,7 @@ module.exports = function(grunt){
           style: 'compressed'
         },
         files: {
-          'public/css/main.css': 'public/scss/*.scss'
+          'public/css/main.css': 'public/scss/style.scss'
         }
       } 
     },
@@ -35,7 +35,7 @@ module.exports = function(grunt){
       },
 
       css: {
-        files: ['public/scss/*.scss'],
+        files: ['**/*.scss'],
         tasks: ['sass'],
         options: {
           spawn: false,
