@@ -111,7 +111,7 @@ app.get("/filter", function(req, res){
 })
 
 io.on("connection", function(socket){
-  var filter = ['hiring', 'webdeveloper', 'web developer', 'webdev', 'recruiting']
+  var filter = ['hiring', 'webdeveloper', 'web developer', 'webdev', 'recruiting', 'frontend', 'backend', 'fullstack']
     , stream = T.stream('statuses/filter', { track: filter } )
 
   stream.on('tweet', function (data) {
@@ -179,7 +179,6 @@ io.on("connection", function(socket){
           , latitude = coord.shift();
 
         geocoder.reverse(latitude, longitude, function(err, res) {
-          // if(res.shift()){
             var locInfo = res.shift()
 
             t.parameters.loc = {
@@ -189,7 +188,6 @@ io.on("connection", function(socket){
             };
             console.log('Location found')
             t.save(t.parameters);
-          // }
         })
       }
 
