@@ -3,9 +3,9 @@ html
   head
     meta(name='viewport', content='width=device-width', initial-scale='1.0')
     link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans')
-    link(rel='stylesheet', href='/css/reset.css')
-    link(rel='stylesheet', href='/css/main.css')
+    link(rel='stylesheet', href='/css/normalize.css')
     link(rel='stylesheet', href='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/main.css')
     title Twitter Job Finder
   body
     .container
@@ -13,12 +13,6 @@ html
         .col-md-4#filter-container
           form#filter-form
             input.form-control#job-title(placeholder = "Job title...")
-            //- select.form-control#select-location
-            //-   option(value='') -Select a Filter-
-            //-   option(value='I') I
-            //-   option(value='frontend') Front End
-            //-   option(value='backend') Back End
-            //-   option(value='fullstack') Full Stack
             select.form-control#filter-location
               each val, index in states
                 option(value= val)= index
