@@ -8,7 +8,7 @@ Filter = {}
 Filter.Controller = function(view){
   this.view = new view;
 }
-
+ 
 Filter.Controller.prototype = {
   bindListeners: function(){
     this.filterBtnListener();
@@ -43,6 +43,8 @@ Filter.Controller.prototype = {
         $('#tweet-river').prepend("<a href='"+url+"'><div class = 'row tweet-container'><img class ='col-md-2 img-circle img-responsive center-block inline-block' src=" + pic + "><div class='username col-md-7 inline-block'>" + screenName +"</div>"+"<div class='time col-md-3 inline-block'>"+ date+"</div><div class = 'tweet col-md-10 inline-block'>"+tweetText+"</div></div></a>")
       }
     })
+      var r = new River.Controller(River.View);
+      r.bindListeners(); 
   },
 
   formatDate: function(utc){

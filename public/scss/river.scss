@@ -1,48 +1,43 @@
-body {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 1em;
-}
+// .container{
+//   background-color: rgba(255,255,255,0.85);
+//   border: 1px solid #EEE;
+//   margin: 5rem 1rem;
+//   #container-row{
+//     margin: 1rem;
+//     a{
+//       text-decoration: none;
+//       color: black;
+//     }
+//     #tweet-river{
+//       overflow: scroll;
+//       max-height: 52rem;
+//       background-color: white;
+//       .tweet-container{
+//         border-top: 1px solid #EEE;
+//         border: collapse;
+//         padding: 7px;
+//         .username{
+//           font-weight: 900;
+//         }
+//         .time {
+//           color: lightgrey;
+//         }
+//       }
+//     }
+//   }
+// }
 
-html{
-/*  background: url(../images/coffee_desk.gif) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;*/
-}
+// .inline{
+//   display:inline;
+// }
 
-.container{
-  border: 1px solid #EEE;
-  margin: 5rem 1rem;
-  #container-row{
-    margin: 1rem;
-    a{
-      text-decoration: none;
-      color: black;
-    }
-    #tweet-river{
-      overflow: scroll;
-      height: 52rem;
-      .tweet-container{
-        border-top: 1px solid #EEE;
-        border: collapse;
-        padding: 7px;
-        .username{
-          font-weight: 900;
-        }
-        .time{
-          color: lightgrey;
-        }
-      }
-    }
-  }
-}
+// .inline-block{
+//   display: inline-block;
+// }
 
-
-.inline{
-  display:inline;
-}
-
-.inline-block{
-  display: inline-block;
-}
+// .shadow{
+//   background-color: #cceaf3;
+//   -webkit-box-shadow: 2px 2px 5px 0px rgba(50, 50, 50, 0.75);
+//   -moz-box-shadow:    2px 2px 5px 0px rgba(50, 50, 50, 0.75);
+//   box-shadow:         2px 2px 5px 0px rgba(50, 50, 50, 0.75);
+// }
